@@ -22,17 +22,36 @@ async function copyText(text) {
   }
 }
 
-document.getElementById('copyBtn').addEventListener('click', async () => {
-  const status = document.getElementById('status');
+function showCopied() {
+  document.getElementById('status').textContent = 'Copied!';
+  document.getElementById('copyBtn').style.display = 'none';
+  chrome.action.setBadgeBackgroundColor({ color: '#2FC21B' });
+  chrome.action.setBadgeText({ text: '✓' });
+  setTimeout(() => chrome.action.setBadgeText({ text: '' }), 3000);
+}
+
+function showCopyButton() {
+  document.getElementById('status').textContent = 'Auto-copy failed. Click Copy:';
+  const btn = document.getElementById('copyBtn');
+  btn.style.display = 'inline-block';
+  btn.addEventListener('click', async () => {
+    const ok = await copyText(SHRUGGIE);
+    if (ok) {
+      showCopied();
+    } else {
+      document.getElementById('status').textContent = 'Copy failed. Please try again.';
+      chrome.action.setBadgeBackgroundColor({ color: '#d9534f' });
+      chrome.action.setBadgeText({ text: '!' });
+      setTimeout(() => chrome.action.setBadgeText({ text: '' }), 3000);
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
   const ok = await copyText(SHRUGGIE);
   if (ok) {
-    status.textContent = 'Copied!';
-    chrome.action.setBadgeBackgroundColor({ color: '#2FC21B' });
-    chrome.action.setBadgeText({ text: '✓' });
+    showCopied();
   } else {
-    status.textContent = 'Copy failed. Please try again.';
-    chrome.action.setBadgeBackgroundColor({ color: '#d9534f' });
-    chrome.action.setBadgeText({ text: '!' });
+    showCopyButton();
   }
-  setTimeout(() => chrome.action.setBadgeText({ text: '' }), 3000);
 });
