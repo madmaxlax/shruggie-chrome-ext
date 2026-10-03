@@ -3,7 +3,7 @@
 
   "name": "Shruggie",
   "short_name": "Shruggie",
-  "description": "Click the toolbar icon, then Copy, to copy the shruggie ¯\\_(ツ)_/¯ to your clipboard",
+  "description": "Click the toolbar icon to copy the shruggie ¯\\_(ツ)_/¯ to your clipboard",
   "version": "1.0.1",
   "action": {
     "default_icon": {
